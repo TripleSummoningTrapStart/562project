@@ -56,7 +56,7 @@ CREATE TABLE `Assignments` (
   `InstructorId` INTEGER NOT NULL REFERENCES People(PeopleId),
   `DueDate` DATETIME NULL ,
   PRIMARY KEY (`AssignmentId`)
-);z
+);
 
 -- ---
 -- Table 'Graded'
@@ -69,6 +69,7 @@ CREATE TABLE `Graded` (
   `GradeId` INTEGER NULL SERIAL,
   `Graded_Against_SolutionId` INTEGER NOT NULL REFERENCES Solutions(SolutionId),
   `SubmissionId` INTEGER NOT NULL REFERENCES Submissions(SubmissionId),
+    `AssignmentId` INTEGER NOT NULL REFERENCES Assignments(AssignmentId),
   `Grade` INTEGER NOT NULL ,
   `GradeComments` VARCHAR(MAX) NULL,
   PRIMARY KEY (`GradeId`)
