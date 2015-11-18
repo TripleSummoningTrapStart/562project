@@ -22,6 +22,5 @@ namespace ReadInSoutions
             this.json = json;
             this.percentage = percentage;
         }
-
     }
 }

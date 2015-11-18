@@ -32,17 +32,13 @@ foreach solution
     grade = call C function.
 insert into graded(submissionID, assignmentId, grade)
 
-
-
-
-CREATE FUNCTION addSolution(percentage int, jsonString varchar, AssnId int) 
+CREATE OR REPLACE FUNCTION addSolution(percentage int, jsonString varchar, AssnId int) 
 returns void as $$
 begin
-insert into solutions(Max_Percentage,JSonString,AssignmentId) values(percentage,jsonString,AssignmentId)
+insert into solutions(Max_Percentage,JSonString,AssignmentId) values(percentage,jsonString,AssignmentId);
 end
 $$
 language'plpgsql'
-
 
 
 CREATE FUNCTION addGrade(Graded_Against_SolutionId int, SubmissionId int, Grade int, GradeComments varchar(Max)) returns void as $$

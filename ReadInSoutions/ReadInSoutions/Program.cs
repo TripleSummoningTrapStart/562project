@@ -17,7 +17,7 @@ namespace ReadInSoutions
         static void Main(string[] args)
         {
             List<Solution> solutions = new List<Solution>();
-            string[] lines = File.ReadAllLines(@"U:\CIS 562\Solutions.txt");
+            string[] lines = File.ReadAllLines(@"C:\Users\Sean\Documents\562Project\562project\Solutions.txt");
             int assignmentID = Convert.ToInt32(lines[0]);
             int num = 1;
             foreach (string s in lines)
@@ -35,8 +35,8 @@ namespace ReadInSoutions
                 }
             }
 
-            using (var conn = new NpgsqlConnection("Host=localhost:5432;Username=postgres;Password=hello;Database=562Project"))
-            {
+            var conn = new NpgsqlConnection("Server=127.0.0.1;Port=5432;Username=postgres;Password=hello;Database=562Project");
+            
                 conn.Open();
 
                 foreach (Solution s in solutions)
@@ -68,7 +68,7 @@ namespace ReadInSoutions
 
                 }               
                 conn.Close();
-            }
+            
             Console.ReadLine();
         }
     }
