@@ -46,7 +46,7 @@ language'plpgsql'
 
 
 
-CREATE OR REPLACE FUNCTION addSubmissions( AssignmentId int, StudentId int, JSonString varchar) returns void as $$
+CREATE OR REPLACE FUNCTION addSubmission( AssignmentId int, StudentId int, JSonString varchar) returns void as $$
 begin
 insert into Submissions(AssignmentId,StudentId,JsonString) values (AssignmentId , StudentId,  JSonString);
 end
@@ -54,9 +54,24 @@ $$
 language'plpgsql'
 
 
-CREATE OR REPLACE FUNCTION addPeople( isIntructor bit, First_Name varchar(50), Last_Name varchar(50)) returns void as $$
+CREATE OR REPLACE FUNCTION addPeople( isIntructor bit, First_Name varchar, Last_Name varchar) returns void as $$
 begin
 insert into People(isInstructor, First_name, Last_Name) values (isIntructor   , First_Name ,  Last_Name );
+end
+$$
+language'plpgsql'
+
+CREATE FUNCTION getSolution(AssnId int) 
+returns void as $$
+begin
+select * from solutions s where s.AssignmentId = AssnId;
+end
+$$
+language'plpgsql'
+CREATE FUNCTION getSubmission(SubmissionId int) 
+returns void as $$
+begin
+select * from submissions s where s.SubmissionId = SubmissionId;
 end
 $$
 language'plpgsql'

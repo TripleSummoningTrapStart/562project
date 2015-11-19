@@ -16,3 +16,6 @@ E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin
 E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.csprojResolveAssemblyReference.cache
 E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.exe
 E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.pdb
+U:\562project\562project\ReadInSoutions\ReadInSoutions\bin\Debug\ReadInSoutions.exe.config
+U:\562project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.exe
+U:\562project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.pdb
