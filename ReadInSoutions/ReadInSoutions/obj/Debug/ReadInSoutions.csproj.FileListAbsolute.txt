@@ -8,3 +8,11 @@ C:\Users\Sean\Documents\562Project\562project\ReadInSoutions\ReadInSoutions\bin\
 C:\Users\Sean\Documents\562Project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.csprojResolveAssemblyReference.cache
 C:\Users\Sean\Documents\562Project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.exe
 C:\Users\Sean\Documents\562Project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.pdb
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\ReadInSoutions.exe.config
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\ReadInSoutions.exe
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\ReadInSoutions.pdb
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\Npgsql.dll
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\Npgsql.xml
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.csprojResolveAssemblyReference.cache
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.exe
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.pdb

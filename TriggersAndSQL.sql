@@ -1,16 +1,3 @@
-
-CREATE FUNCTION addSubmission(submission varchar, AssignmentId int, StudentId, int) returns void as $$
-declare sub varchar;
-begin
-
-sub = sanitize //make this;
-
-insert into submissions values (AssignmentId, StudentId, sub)
-
-end
-$$
-language'plpgsql'
-
 create trigger insert_grade
 after insert on submissions
 for each row
@@ -35,47 +22,41 @@ insert into graded(submissionID, assignmentId, grade)
 CREATE OR REPLACE FUNCTION addSolution(percentage int, jsonString varchar, AssnId int) 
 returns void as $$
 begin
-insert into solutions(Max_Percentage,JSonString,AssignmentId) values(percentage,jsonString,AssignmentId);
+insert into solutions(Max_Percentage,JSonString,AssignmentId) values(percentage,jsonString,AssnId);
 end
 $$
 language'plpgsql'
 
 
-CREATE FUNCTION addGrade(Graded_Against_SolutionId int, SubmissionId int, Grade int, GradeComments varchar(Max)) returns void as $$
+CREATE OR REPLACE FUNCTION addGrade(Graded_Against_SolutionId int, SubmissionId int, Grade int, GradeComments varchar)) 
+returns void as $$
 begin
-insert into Graded values (Graded_Against_SolutionId, SubmissionId , Grade, GradeComments  )
-
+insert into Graded(Graded_Against_SolutionId,SubmissionId,Grade,GradeComments) values (Graded_Against_SolutionId, SubmissionId , Grade, GradeComments);
 end
 $$
 language'plpgsql'
 
 
-CREATE FUNCTION addAssignment( InstructorId int, DueDate DateTime) returns void as $$
+CREATE OR REPLACE FUNCTION addAssignment( InstructorId int) returns void as $$
 begin
-insert into Assignments values (InstructorId, DueDate)
+insert into Assignments(InstructorId) values (InstructorId);
 end
 $$
 language'plpgsql'
 
 
-CREATE FUNCTION addSubmissions( AssignmentId int, StudentId int, JSonString varchar(max), SubmissionDate DATETIME) returns void as $$
+
+CREATE OR REPLACE FUNCTION addSubmissions( AssignmentId int, StudentId int, JSonString varchar) returns void as $$
 begin
-insert into Submissions values (AssignmentId , StudentId,  JSonString,  SubmissionDate )
+insert into Submissions(AssignmentId,StudentId,JsonString) values (AssignmentId , StudentId,  JSonString);
 end
 $$
 language'plpgsql'
 
 
-CREATE FUNCTION addSolutions( Max_Percentage int, JSonString varchar, SubmissionDate DATETIME) returns void as $$
+CREATE OR REPLACE FUNCTION addPeople( isIntructor bit, First_Name varchar(50), Last_Name varchar(50)) returns void as $$
 begin
-insert into Solutions values (Max_Percentage  , JSonString ,  SubmissionDate )
-end
-$$
-language'plpgsql'
-
-CREATE FUNCTION addPeople( isIntructor bit, First_Name varchar(50), Last_Name varchar(50)) returns void as $$
-begin
-insert into People values (isIntructor   , First_Name ,  Last_Name )
+insert into People(isInstructor, First_name, Last_Name) values (isIntructor   , First_Name ,  Last_Name );
 end
 $$
 language'plpgsql'
