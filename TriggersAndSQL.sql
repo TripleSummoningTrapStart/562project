@@ -61,14 +61,15 @@ end
 $$
 language'plpgsql'
 
-CREATE FUNCTION getSolution(AssnId int) 
+CREATE OR REPLACE FUNCTION getSolution(AssnId int) 
 returns void as $$
 begin
 select * from solutions s where s.AssignmentId = AssnId;
 end
 $$
 language'plpgsql'
-CREATE FUNCTION getSubmission(SubmissionId int) 
+
+CREATE OR REPLACE FUNCTION getSubmission(SubmissionId int) 
 returns void as $$
 begin
 select * from submissions s where s.SubmissionId = SubmissionId;

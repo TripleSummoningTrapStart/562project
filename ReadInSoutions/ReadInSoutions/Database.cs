@@ -46,17 +46,18 @@ namespace ReadInSoutions
         public functions()
         {
             conn = new NpgsqlConnection("Host=127.0.0.1;Port=5432;Username=postgres;Password=hello;Database=562Project");
-            conn.Open();
+        
         }
         public int addSubmission(string json)
         {
-            NpgsqlCommand command = new NpgsqlCommand("addSubmisson", conn);
+            conn.Open();
+            NpgsqlCommand command = new NpgsqlCommand("addSubmission", conn);
             command.CommandType = CommandType.StoredProcedure;
 
             var parameter = command.CreateParameter();
             parameter.ParameterName = "AssignmentId";
             parameter.DbType = System.Data.DbType.Int32;
-            parameter.Value = 1;
+            parameter.Value = 2;
             command.Parameters.Add(parameter);
 
             var parameter2 = command.CreateParameter();
@@ -67,12 +68,13 @@ namespace ReadInSoutions
 
             var parameter3 = command.CreateParameter();
             parameter3.ParameterName = "JSonString";
-            parameter3.DbType = System.Data.DbType.AnsiString;
+            parameter3.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Varchar;
+            //parameter3.DbType = System.Data.DbType.AnsiString;
             parameter3.Value = json;
             command.Parameters.Add(parameter3);
             command.ExecuteNonQuery();
-
-            return Grade(json, 1);
+            conn.Close();
+            return Grade(json, 2);
         }
         public int Grade(string json, int assignmentID)
         {
@@ -82,11 +84,14 @@ namespace ReadInSoutions
 
             int match;
             int bestMatchIndex = -1;
+            int currentIndex;
+
             for(int m = 0; m < solutions.Count; m++)
             {
+                match = 0;
                 for (int i = 0; i < solutions[m].database.cols.Count; i++)
                 {
-                    match = 0;
+                    
                     for (int k = 0; k < submissionColumns.Count; k++)
                     {
                         if (solutions[m].database.cols[i].id == submissionColumns[k].id)
@@ -95,16 +100,16 @@ namespace ReadInSoutions
                         }
 
                     }
-                    if (match == solutions[m].database.cols.Count)
-                    {
-                        bestMatchIndex = i;
-                    }
-                    else
-                    {
-                        differences.Add(new Tuple<int, int>(i, (Math.Abs(solutions[m].database.cols.Count - match) + Math.Abs(submissionColumns.Count - solutions[m].database.cols.Count))));
-                    }
-
                 }
+                if (match == solutions[m].database.cols.Count && match == submissionColumns.Count)
+                {
+                    bestMatchIndex = m;
+                }
+                else
+                {
+                    differences.Add(new Tuple<int, int>(m, (Math.Abs(solutions[m].database.cols.Count - match) + Math.Abs(submissionColumns.Count - solutions[m].database.cols.Count))));
+                }
+              
             }
            
             if (bestMatchIndex == -1)
@@ -116,6 +121,7 @@ namespace ReadInSoutions
         }
         public void addGrade(int index, SolutionDatabase s)
         {
+            conn.Open();
             NpgsqlCommand command = new NpgsqlCommand("addGrade", conn);
             command.CommandType = CommandType.StoredProcedure;
 
@@ -136,7 +142,6 @@ namespace ReadInSoutions
             parameter3.DbType = System.Data.DbType.Int32;
             parameter3.Value = s.grade;
             command.Parameters.Add(parameter3);
-            command.ExecuteNonQuery();
 
             var parameter4 = command.CreateParameter();
             parameter4.ParameterName = "GradeComments";
@@ -144,9 +149,11 @@ namespace ReadInSoutions
             parameter4.Value = string.Empty;
             command.Parameters.Add(parameter4);
             command.ExecuteNonQuery();
+            conn.Close();
         }
         public List<SolutionDatabase> getSolutions(int assignmentID)
         {
+            conn.Open();
             List<SolutionDatabase> solutions = new List<SolutionDatabase>();
             NpgsqlCommand command = new NpgsqlCommand("getSolution", conn);
             command.CommandType = CommandType.StoredProcedure;
@@ -157,17 +164,20 @@ namespace ReadInSoutions
             parameter.Value = assignmentID;
             command.Parameters.Add(parameter);
 
+            //NpgsqlCommand command = new NpgsqlCommand("select * from solutions s where s.AssignmentId = " + assignmentID, conn);
+
             NpgsqlDataReader dr = command.ExecuteReader();
 
 
             while (dr.Read())
             {
-                Database d = JsonConvert.DeserializeObject<Database>(dr[3].ToString());
-                solutions.Add(new SolutionDatabase(d, (int)dr[2], (int)dr[0]));
+                string check = dr[2].ToString();
+                Database d = JsonConvert.DeserializeObject<Database>(dr[2].ToString());
+                solutions.Add(new SolutionDatabase(d, (int)dr[1], (int)dr[0]));
             }
-                
-                
 
+
+            conn.Close();
             return solutions;
         }
         public List<Columns> getSubmissionColumns(string json)

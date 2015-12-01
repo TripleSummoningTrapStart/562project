@@ -1,1 +1,1 @@
-[{"name":"table","pos":[16,774],"uq":[["ma18"]],"cols":[{"id":"ma18","name":"charge status"},{"id":"ma23","name":"appeal filing date","nn":false},{"id":"ma20","name":"end date"},{"id":"ma21","name":"number of violations"},{"id":"ma24","name":"appeal hearing date"}]}]
+[{"name":"Crimes","pos":[16,655],"cols":[{"id":"ma8","name":"date charged"},{"id":"ma9","name":"appeal status"},{"id":"ma10","name":"hearing date"},{"id":"ma11","name":"appeal cutoff date"},{"id":"ma12","name":"arresting officers"},{"id":"ma13","name":"crime codes"}]}]

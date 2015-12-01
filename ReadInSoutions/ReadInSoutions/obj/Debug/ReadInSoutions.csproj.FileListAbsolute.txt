@@ -19,3 +19,5 @@ E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj
 U:\562project\562project\ReadInSoutions\ReadInSoutions\bin\Debug\ReadInSoutions.exe.config
 U:\562project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.exe
 U:\562project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.pdb
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\Newtonsoft.Json.dll
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\Newtonsoft.Json.xml
