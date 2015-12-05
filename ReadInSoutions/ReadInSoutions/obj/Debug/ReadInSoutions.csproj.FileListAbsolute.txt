@@ -21,3 +21,5 @@ U:\562project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.
 U:\562project\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.pdb
 E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\Newtonsoft.Json.dll
 E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\bin\Debug\Newtonsoft.Json.xml
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.MainForm.resources
+E:\School\Senior Semester 1\CIS 562\562project\ReadInSoutions\ReadInSoutions\obj\Debug\ReadInSoutions.csproj.GenerateResource.Cache

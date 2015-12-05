@@ -122,6 +122,11 @@ namespace ReadInSoutions
         public void addGrade(int index, SolutionDatabase s)
         {
             conn.Open();
+            NpgsqlCommand commandsubmission = new NpgsqlCommand("Select s.submissionid from submissions s order by s.submissionid desc limit 1 ",conn);
+            int submissionId = (int)commandsubmission.ExecuteScalar();
+            conn.Close();
+            
+            conn.Open();
             NpgsqlCommand command = new NpgsqlCommand("addGrade", conn);
             command.CommandType = CommandType.StoredProcedure;
 
@@ -134,7 +139,7 @@ namespace ReadInSoutions
             var parameter2 = command.CreateParameter();
             parameter2.ParameterName = "SubmissionId";
             parameter2.DbType = System.Data.DbType.Int32;
-            parameter2.Value = 1;
+            parameter2.Value = submissionId;
             command.Parameters.Add(parameter2);
 
             var parameter3 = command.CreateParameter();
@@ -164,7 +169,6 @@ namespace ReadInSoutions
             parameter.Value = assignmentID;
             command.Parameters.Add(parameter);
 
-            //NpgsqlCommand command = new NpgsqlCommand("select * from solutions s where s.AssignmentId = " + assignmentID, conn);
 
             NpgsqlDataReader dr = command.ExecuteReader();
 
