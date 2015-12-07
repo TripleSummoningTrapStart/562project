@@ -17,7 +17,6 @@ namespace ReadInSoutions
         public string id { get; set; }
         public string name { get; set; }
         public bool? nn { get; set; }
-        public string rref {get; set;}
     }
 
     public class Database
@@ -49,7 +48,7 @@ namespace ReadInSoutions
             conn = new NpgsqlConnection("Host=127.0.0.1;Port=5432;Username=postgres;Password=hello;Database=562Project");
         
         }
-        public int addSubmission(string json)
+        public int addSubmission(string json,int assnId, int studentId)
         {
             conn.Open();
             NpgsqlCommand command = new NpgsqlCommand("addSubmission", conn);
@@ -58,19 +57,18 @@ namespace ReadInSoutions
             var parameter = command.CreateParameter();
             parameter.ParameterName = "AssignmentId";
             parameter.DbType = System.Data.DbType.Int32;
-            parameter.Value = 2;
+            parameter.Value = assnId;
             command.Parameters.Add(parameter);
 
             var parameter2 = command.CreateParameter();
             parameter2.ParameterName = "StudentId";
             parameter2.DbType = System.Data.DbType.Int32;
-            parameter2.Value = 1;
+            parameter2.Value = studentId;
             command.Parameters.Add(parameter2);
 
             var parameter3 = command.CreateParameter();
             parameter3.ParameterName = "JSonString";
             parameter3.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Varchar;
-            //parameter3.DbType = System.Data.DbType.AnsiString;
             parameter3.Value = json;
             command.Parameters.Add(parameter3);
             command.ExecuteNonQuery();
@@ -80,29 +78,16 @@ namespace ReadInSoutions
         public int Grade(string json, int assignmentID)
         {
             List<SolutionDatabase> solutions = getSolutions(assignmentID);
-            Database submissionDatabase = getSubmissionDatabase(json);
-            List<Columns> submissionColumns = submissionDatabase.cols;
+            List<Columns> submissionColumns = getSubmissionColumns(json);
             List<Tuple<int, int>> differences = new List<Tuple<int, int>>();
 
             int match;
             int bestMatchIndex = -1;
-            int numberOfRef;
 
             for(int m = 0; m < solutions.Count; m++)
             {
                 match = 0;
-                numberOfRef = 0;
-                for(int i = 0; i < solutions[m].database.uq.Count; i++)
-                {
-                    for (int k = 0; k < submissionDatabase.uq.Count; k++)
-                    {
-                        if (solutions[m].database.uq[i] == submissionDatabase.uq[k])
-                        {
-                            match++;
-                        }
 
-                    }
-                }
                 for (int i = 0; i < solutions[m].database.cols.Count; i++)
                 {
                     
@@ -112,12 +97,6 @@ namespace ReadInSoutions
                         {
                             match++;
                         }
-                        if (solutions[m].database.cols[i].rref == submissionColumns[k].rref)
-                        {
-                            match++;
-                            numberOfRef++;
-                        }
-
                     }
                 }
                 if (match == solutions[m].database.cols.Count && match == submissionColumns.Count)
@@ -126,7 +105,7 @@ namespace ReadInSoutions
                 }
                 else
                 {
-                    differences.Add(new Tuple<int, int>(m, (Math.Abs(solutions[m].database.cols.Count + solutions[m].database.uq.Count - match) + Math.Abs(submissionColumns.Count - solutions[m].database.cols.Count) + numberOfRef + Math.Abs(submissionDatabase.uq.Count - solutions[m].database.uq.Count))));
+                    differences.Add(new Tuple<int, int>(m, (Math.Abs(solutions[m].database.cols.Count - match) + Math.Abs(submissionColumns.Count - solutions[m].database.cols.Count))));
                 }
               
             }
@@ -203,10 +182,10 @@ namespace ReadInSoutions
             conn.Close();
             return solutions;
         }
-        public Database getSubmissionDatabase(string json)
+        public List<Columns> getSubmissionColumns(string json)
         {
             Database d = JsonConvert.DeserializeObject<Database>(json);
-            return d;
+            return d.cols;
         }
         public int findClosestMatch(List<Tuple<int, int>> differences)
         {
@@ -222,54 +201,32 @@ namespace ReadInSoutions
             }
             return closestIndex;
         }
-        public void addSolutions()
+        public void addSolutions(string json, int assnId, int percent)
         {
-            List<Solution> solutions = new List<Solution>();
-            string[] lines = File.ReadAllLines(@"E:\School\Senior Semester 1\CIS 562\562project\Solutions.txt");
-            int assignmentID = Convert.ToInt32(lines[0]);
-            int num = 1;
-            foreach (string s in lines)
-            {
-                if (num == 1)
-                {
-                    num++;
-                }
-                else
-                {
-                    string[] split = s.Split('|');
-                    int percentage = Convert.ToInt32(split[0]);
-                    string json = split[1];
-                    solutions.Add(new Solution(percentage, json, assignmentID));
-                }
-            }
+            conn.Open();
+            NpgsqlCommand command = new NpgsqlCommand("addSolution", conn);
+            command.CommandType = CommandType.StoredProcedure;
 
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "percentage";
+            parameter.DbType = System.Data.DbType.Int32;
+            parameter.Value = percent;
+            command.Parameters.Add(parameter);
 
-            foreach (Solution s in solutions)
-            {
+            var parameter2 = command.CreateParameter();
+            parameter2.ParameterName = "jsonString";
+            parameter2.DbType = System.Data.DbType.AnsiString;
+            parameter2.Value = json;
+            command.Parameters.Add(parameter2);
 
-                NpgsqlCommand command = new NpgsqlCommand("addSolution", conn);
-                command.CommandType = CommandType.StoredProcedure;
+            var parameter3 = command.CreateParameter();
+            parameter3.ParameterName = "AssnId";
+            parameter3.DbType = System.Data.DbType.Int32;
+            parameter3.Value = assnId;
+            command.Parameters.Add(parameter3);
+            command.ExecuteNonQuery();
+            conn.Close();
 
-                var parameter = command.CreateParameter();
-                parameter.ParameterName = "percentage";
-                parameter.DbType = System.Data.DbType.Int32;
-                parameter.Value = s.percentage;
-                command.Parameters.Add(parameter);
-
-                var parameter2 = command.CreateParameter();
-                parameter2.ParameterName = "jsonString";
-                parameter2.DbType = System.Data.DbType.AnsiString;
-                parameter2.Value = s.json;
-                command.Parameters.Add(parameter2);
-
-                var parameter3 = command.CreateParameter();
-                parameter3.ParameterName = "AssnId";
-                parameter3.DbType = System.Data.DbType.Int32;
-                parameter3.Value = s.assignmentId;
-                command.Parameters.Add(parameter3);
-                command.ExecuteNonQuery();
-
-            }
         }
         public void CloseConnections()
         {
