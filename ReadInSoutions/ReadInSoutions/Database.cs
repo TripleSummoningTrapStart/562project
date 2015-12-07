@@ -17,6 +17,7 @@ namespace ReadInSoutions
         public string id { get; set; }
         public string name { get; set; }
         public bool? nn { get; set; }
+        public string rref {get; set;}
     }
 
     public class Database
@@ -79,16 +80,29 @@ namespace ReadInSoutions
         public int Grade(string json, int assignmentID)
         {
             List<SolutionDatabase> solutions = getSolutions(assignmentID);
-            List<Columns> submissionColumns = getSubmissionColumns(json);
+            Database submissionDatabase = getSubmissionDatabase(json);
+            List<Columns> submissionColumns = submissionDatabase.cols;
             List<Tuple<int, int>> differences = new List<Tuple<int, int>>();
 
             int match;
             int bestMatchIndex = -1;
-            int currentIndex;
+            int numberOfRef;
 
             for(int m = 0; m < solutions.Count; m++)
             {
                 match = 0;
+                numberOfRef = 0;
+                for(int i = 0; i < solutions[m].database.uq.Count; i++)
+                {
+                    for (int k = 0; k < submissionDatabase.uq.Count; k++)
+                    {
+                        if (solutions[m].database.uq[i] == submissionDatabase.uq[k])
+                        {
+                            match++;
+                        }
+
+                    }
+                }
                 for (int i = 0; i < solutions[m].database.cols.Count; i++)
                 {
                     
@@ -97,6 +111,11 @@ namespace ReadInSoutions
                         if (solutions[m].database.cols[i].id == submissionColumns[k].id)
                         {
                             match++;
+                        }
+                        if (solutions[m].database.cols[i].rref == submissionColumns[k].rref)
+                        {
+                            match++;
+                            numberOfRef++;
                         }
 
                     }
@@ -107,7 +126,7 @@ namespace ReadInSoutions
                 }
                 else
                 {
-                    differences.Add(new Tuple<int, int>(m, (Math.Abs(solutions[m].database.cols.Count - match) + Math.Abs(submissionColumns.Count - solutions[m].database.cols.Count))));
+                    differences.Add(new Tuple<int, int>(m, (Math.Abs(solutions[m].database.cols.Count + solutions[m].database.uq.Count - match) + Math.Abs(submissionColumns.Count - solutions[m].database.cols.Count) + numberOfRef + Math.Abs(submissionDatabase.uq.Count - solutions[m].database.uq.Count))));
                 }
               
             }
@@ -184,10 +203,10 @@ namespace ReadInSoutions
             conn.Close();
             return solutions;
         }
-        public List<Columns> getSubmissionColumns(string json)
+        public Database getSubmissionDatabase(string json)
         {
             Database d = JsonConvert.DeserializeObject<Database>(json);
-            return d.cols;
+            return d;
         }
         public int findClosestMatch(List<Tuple<int, int>> differences)
         {
