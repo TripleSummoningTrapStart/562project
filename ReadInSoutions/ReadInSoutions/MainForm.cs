@@ -65,6 +65,7 @@ namespace ReadInSoutions
             {
                 uxGrade.Enabled = false;
                 uxStud.Enabled = true;
+                uxGrade.Text = "";
             }
             else if (uxMode.SelectedIndex == 1)
             {

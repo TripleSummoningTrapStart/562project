@@ -73,7 +73,7 @@ namespace ReadInSoutions
             command.Parameters.Add(parameter3);
             command.ExecuteNonQuery();
             conn.Close();
-            return Grade(json, 2);
+            return Grade(json, assnId);
         }
         public int Grade(string json, int assignmentID)
         {
